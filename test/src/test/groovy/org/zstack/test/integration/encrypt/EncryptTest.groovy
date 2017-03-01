@@ -1,6 +1,7 @@
 package org.zstack.test.integration.encrypt
 
 import org.zstack.kvm.KVMHostInventory
+import org.zstack.kvm.KVMHostVO
 import org.zstack.testlib.EnvSpec
 import org.zstack.testlib.KVMHostSpec
 import org.zstack.testlib.Test
@@ -131,6 +132,13 @@ class EncryptTest extends Test{
 			password = "password"
 		}
 
+		KVMHostVO kvmHostVO = dbFindByUuid(host.getUuid(),KVMHostVO.class)
+
+		System.out.print("kvmHostVo password is : "+kvmHostVO.password);
+		System.out.print("host password is : "+kvmHostVO.password);
+		System.out.print("host getpassword is : "+kvmHostVO.password);
+
+		assert !kvmHostVO.password.equals("password")
 		assert !host.password.equals("password")
 		assert host.getPassword().equals("password")
 	}
