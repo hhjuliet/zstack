@@ -2,11 +2,12 @@ package org.zstack.test.integration.progress
 
 import org.zstack.test.integration.kvm.Env
 import org.zstack.testlib.EnvSpec
+import org.zstack.testlib.Test
 
 /**
  * Created by hhjuliet on 2/28/17.
  */
-class TestProgressReport {
+class TestProgressReport extends Test{
 	def Doc ="use test progress"
 
 	@Override

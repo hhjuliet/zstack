@@ -1,16 +1,14 @@
 package org.zstack.test.integration.encrypt
 
 import org.zstack.kvm.KVMHostInventory
-import org.zstack.sdk.AddKVMHostAction
 import org.zstack.testlib.EnvSpec
 import org.zstack.testlib.KVMHostSpec
-import org.zstack.testlib.SpringSpec
 import org.zstack.testlib.Test
 
 /**
  * Created by hhjuliet on 2017/3/1.
  */
-class TestEncrypt extends Test{
+class EncryptTest extends Test{
 	def Doc ="use test encrypt"
 	EnvSpec myenv
 
