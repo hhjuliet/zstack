@@ -18,7 +18,6 @@ class EncryptTest extends Test{
 		spring{
 			localStorage()
 			kvm()
-			include("TestAddKvmHost.xml")
 			include("Kvm.xml")
 			include("KVMSimulator.xml")
 
