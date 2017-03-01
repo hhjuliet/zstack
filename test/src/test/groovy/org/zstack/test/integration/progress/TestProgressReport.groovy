@@ -17,12 +17,33 @@ class TestProgressReport {
 			virtualRouter()
 			securityGroup()
 			kvm()
+			include("TestProgressReport.xml")
+			include("KVMRelated.xml")
+			include("Progress.xml")
 		}
 	}
+
+
+	static EnvSpec env() {
+		sftpBackupStorage {
+			name = "sftp"
+			url = "/sftp"
+			username = "root"
+			password = "password"
+			hostname = "localhost"
+
+			image {
+				name = "TestImage"
+				url  = "http://zstack.org/download/test.qcow2"
+			}
+		}
+	}
+
 
 	@Override
 	void environment() {
 		env = Env.oneVmBasicEnv()
+
 	}
 
 
@@ -33,9 +54,9 @@ class TestProgressReport {
 		}
 	}
 
-
-
-	static EnvSpec env(){
+	void testOneProgress(){
 
 	}
+
+
 }
