@@ -5,6 +5,7 @@ import org.zstack.kvm.KVMHostInventory
 import org.zstack.kvm.KVMHostVO
 import org.zstack.network.securitygroup.SecurityGroupConstant
 import org.zstack.network.service.virtualrouter.VirtualRouterConstant
+import org.zstack.testlib.ClusterSpec
 import org.zstack.testlib.EnvSpec
 import org.zstack.testlib.KVMHostSpec
 import org.zstack.testlib.Test
@@ -32,7 +33,7 @@ class EncryptTest extends Test{
 
 	@Override
 	void environment() {
-		myenv = env{
+		myenv = env {
 			instanceOffering {
 				name = "instanceOffering"
 				memory = SizeUnit.GIGABYTE.toByte(8)
@@ -57,7 +58,6 @@ class EncryptTest extends Test{
 				}
 			}
 
-
 			zone {
 				name = "zone"
 				description = "test"
@@ -65,6 +65,13 @@ class EncryptTest extends Test{
 				cluster {
 					name = "cluster"
 					hypervisorType = "KVM"
+
+					kvm {
+						name = "kvm"
+						managementIp = "localhost"
+						username = "root"
+						password = "password"
+					}
 
 					attachPrimaryStorage("local")
 					attachL2Network("l2")
@@ -135,11 +142,13 @@ class EncryptTest extends Test{
 
 	@Override
 	void test() {
-		myenv.create()
+		myenv.create{
+			testEncrypt()
+		}
 	}
 
 	void testEncrypt(){
-		KVMHostSpec kvmspec = myenv.getSpecsByName("kvm")
+		ClusterSpec clusterSpec = myenv.specByName("cluster")
 
 		println("start123")
 
@@ -147,7 +156,9 @@ class EncryptTest extends Test{
 			name = "kvm1"
 			password = "password123456789"
 			username = "admin"
-			managementIp = "localhost"
+			managementIp = "127.0.0.1"
+			clusterUuid = clusterSpec.inventory.uuid
+
 		}
 
 		println("finish123")
