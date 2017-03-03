@@ -70,7 +70,7 @@ class EncryptTest extends Test{
 						name = "kvm1"
 						managementIp = "localhost"
 						username = "root"
-						password = "password"
+						password = "password111"
 					}
 
 					attachPrimaryStorage("local")
@@ -152,26 +152,15 @@ class EncryptTest extends Test{
 
 		println("prestart123")
 
-		KVMHostSpec kvmHostSpec = myenv.specsByName("kvm1")
+		KVMHostSpec kvmHostSpec = myenv.specByName("kvm1")
 
 		println("start123")
 
-		KVMHostInventory kvmHost = addKVMHost {
-			name = "kvm1"
-			password = "password123456789"
-			username = "admin"
-			managementIp = "127.0.0.1"
-			clusterUuid = clusterSpec.inventory.uuid
 
-		}
+		KVMHostVO kvmHostVO = dbFindByUuid(kvmHostSpec.inventory.uuid,KVMHostVO.class)
 
-		println("finish123")
+		assert kvmHostVO.password.equals("password111")
 
-		KVMHostVO kvmHostVO = dbFindByUuid(kvmHost.getUuid(),KVMHostVO.class)
-
-		System.out.print("kvmHostVo password is : "+kvmHostVO.password);
-		System.out.print("host password is : "+kvmHostVO.password);
-		System.out.print("host getpassword is : "+kvmHostVO.password);
 
 	}
 
