@@ -1,10 +1,14 @@
 package org.zstack.test.integration.encrypt
 
+import org.zstack.header.network.service.NetworkServiceType
 import org.zstack.kvm.KVMHostInventory
 import org.zstack.kvm.KVMHostVO
+import org.zstack.network.securitygroup.SecurityGroupConstant
+import org.zstack.network.service.virtualrouter.VirtualRouterConstant
 import org.zstack.testlib.EnvSpec
 import org.zstack.testlib.KVMHostSpec
 import org.zstack.testlib.Test
+import org.zstack.utils.data.SizeUnit
 
 /**
  * Created by hhjuliet on 2017/3/1.
@@ -41,13 +45,6 @@ class EncryptTest extends Test{
 				cluster {
 					name = "cluster"
 					hypervisorType = "KVM"
-
-					kvm {
-						name = "kvm"
-						managementIp = "localhost"
-						username = "root"
-						password = "password"
-					}
 
 					attachPrimaryStorage("local")
 					attachL2Network("l2")
@@ -123,23 +120,24 @@ class EncryptTest extends Test{
 
 	void testEncrypt(){
 		KVMHostSpec kvmspec = myenv.getSpecsByName("kvm")
-		KVMHostInventory host = addKVMHost {
-			name = kvmspec.inventory.name
-			clusterUuid = kvmspec.inventory.clusterUuid
-			managementIp = kvmspec.inventory.managementIp
-			username = "root"
-			password = "password"
+
+		println("start==========")
+
+		KVMHostInventory kvmHost = addKVMHost {
+			name = "kvm1"
+			password = "password123456789"
+			username = "admin"
+			managementIp = "localhost"
 		}
 
-		KVMHostVO kvmHostVO = dbFindByUuid(host.getUuid(),KVMHostVO.class)
+		println("finish==========")
+
+		KVMHostVO kvmHostVO = dbFindByUuid(kvmHost.getUuid(),KVMHostVO.class)
 
 		System.out.print("kvmHostVo password is : "+kvmHostVO.password);
 		System.out.print("host password is : "+kvmHostVO.password);
 		System.out.print("host getpassword is : "+kvmHostVO.password);
 
-		assert !kvmHostVO.password.equals("password")
-		assert !host.password.equals("password")
-		assert host.getPassword().equals("password")
 	}
 
 
