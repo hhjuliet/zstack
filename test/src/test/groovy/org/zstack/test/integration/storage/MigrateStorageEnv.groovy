@@ -69,7 +69,8 @@ use:
 						password = "password"
 					}
 
-					attachPrimaryStorage("local")
+					attachPrimaryStorage("local1")
+					attachPrimaryStorage("local2")
 					attachL2Network("l2")
 				}
 
