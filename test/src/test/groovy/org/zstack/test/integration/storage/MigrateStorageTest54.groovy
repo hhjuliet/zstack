@@ -7,6 +7,7 @@ import org.zstack.header.volume.Volume
 import org.zstack.header.volume.VolumeInventory
 import org.zstack.kvm.KVMAgentCommands
 import org.zstack.kvm.KVMConstant
+import org.zstack.sdk.LocalStorageResourceRefInventory
 import org.zstack.sdk.VmInstanceInventory
 import org.zstack.testlib.EnvSpec
 import org.zstack.testlib.KVMHostSpec
@@ -68,6 +69,7 @@ class MigrateStorageTest54 extends Test{
 			return rsp
 		}
 
+
 		VmInstanceInventory inv = stopVmInstance {
 			uuid = spec.inventory.uuid
 		}
@@ -80,15 +82,16 @@ class MigrateStorageTest54 extends Test{
 		def vmvo = dbFindByUuid(cmd.uuid, VmInstanceVO.class)
 		assert vmvo.state == VmInstanceState.Stopped
 
-		localStorageMigrateVolume {
+		LocalStorageResourceRefInventory localStorageResourceRefInventory = localStorageMigrateVolume {
 			volumeUuid = spec.inventory.rootVolumeUuid;
 			destHostUuid = kvmHost1.inventory.uuid;
 		}
 
-		localStorageMigrateVolume {
+		LocalStorageResourceRefInventory localStorageResourceRefInventory1 = localStorageMigrateVolume {
 			volumeUuid = spec.inventory.rootVolumeUuid;
 			destHostUuid = kvmHost2.inventory.uuid;
 		}
+		println("inventory is : "+localStorageResourceRefInventory.resourceUuid)
 
 	}
 

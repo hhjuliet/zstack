@@ -167,7 +167,7 @@ class EncryptTest extends Test{
 			clusterUuid = clusterSpec.inventory.uuid
 
 		}*/
-
+		addKVMHost {}
 
 		KVMHostVO kvmHostVO = dbFindByUuid(kvmHost.inventory.uuid,KVMHostVO.class)
 
