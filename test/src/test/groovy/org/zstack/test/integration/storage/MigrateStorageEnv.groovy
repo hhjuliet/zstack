@@ -1,38 +1,27 @@
-package org.zstack.test.integration.encrypt
+package org.zstack.test.integration.storage
 
 import org.zstack.header.network.service.NetworkServiceType
-import org.zstack.kvm.KVMHostInventory
-import org.zstack.kvm.KVMHostVO
 import org.zstack.network.securitygroup.SecurityGroupConstant
 import org.zstack.network.service.virtualrouter.VirtualRouterConstant
 import org.zstack.testlib.EnvSpec
-import org.zstack.testlib.KVMHostSpec
 import org.zstack.testlib.Test
 import org.zstack.utils.data.SizeUnit
 
 /**
- * Created by hhjuliet on 2017/3/1.
+ * Created by hhjuliet on 2017/3/3.
  */
-class EncryptTest extends Test{
-	def Doc ="use test encrypt"
-	EnvSpec myenv
+class MigrateStorageEnv {
+	def DOC = """
+use:
+1. sftp backup storage
+2. local primary storage
+3. virtual router provider
+4. l2 novlan network
+5. security group
+"""
 
-	@Override
-	void setup() {
-		spring{
-			sftpBackupStorage()
-			localStorage()
-			virtualRouter()
-			securityGroup()
-			kvm()
-			include("Kvm.xml")
-			include("KVMSimulator.xml")
-		}
-	}
-
-	@Override
-	void environment() {
-		myenv = env{
+	static EnvSpec migrateStorageBasicEnv() {
+		return Test.makeEnv {
 			instanceOffering {
 				name = "instanceOffering"
 				memory = SizeUnit.GIGABYTE.toByte(8)
@@ -48,15 +37,14 @@ class EncryptTest extends Test{
 
 				image {
 					name = "image1"
-					url = "http://zstack.org/download/test.qcow2"
+					url  = "http://zstack.org/download/test.qcow2"
 				}
 
 				image {
 					name = "vr"
-					url = "http://zstack.org/download/vr.qcow2"
+					url  = "http://zstack.org/download/vr.qcow2"
 				}
 			}
-
 
 			zone {
 				name = "zone"
@@ -66,13 +54,33 @@ class EncryptTest extends Test{
 					name = "cluster"
 					hypervisorType = "KVM"
 
+					kvm {
+						name = "kvm1"
+						managementIp = "localhost"
+						username = "root"
+						password = "password"
+
+					}
+
+					kvm {
+						name = "kvm2"
+						managementIp = "127.0.0.1"
+						username = "root"
+						password = "password"
+					}
+
 					attachPrimaryStorage("local")
 					attachL2Network("l2")
 				}
 
 				localPrimaryStorage {
-					name = "local"
-					url = "/local_ps"
+					name = "local1"
+					url = "/test1"
+
+				}
+				localPrimaryStorage {
+					name = "local2"
+					url = "/test2"
 				}
 
 				l2NoVlanNetwork {
@@ -101,7 +109,18 @@ class EncryptTest extends Test{
 					}
 
 					l3Network {
-						name = "pubL3"
+						name = "pubL3network1"
+
+						ip {
+							startIp = "12.16.10.10"
+							endIp = "12.16.10.100"
+							netmask = "255.255.255.0"
+							gateway = "12.16.10.1"
+						}
+					}
+
+					l3Network {
+						name = "pubL3network2"
 
 						ip {
 							startIp = "12.16.10.10"
@@ -132,36 +151,4 @@ class EncryptTest extends Test{
 			}
 		}
 	}
-
-	@Override
-	void test() {
-		myenv.create()
-	}
-
-	void testEncrypt(){
-		KVMHostSpec kvmspec = myenv.getSpecsByName("kvm")
-
-		println("start123")
-
-		KVMHostInventory kvmHost = addKVMHost {
-			name = "kvm1"
-			password = "password123456789"
-			username = "admin"
-			managementIp = "localhost"
-		}
-
-		println("finish123")
-
-		KVMHostVO kvmHostVO = dbFindByUuid(kvmHost.getUuid(),KVMHostVO.class)
-
-		System.out.print("kvmHostVo password is : "+kvmHostVO.password);
-		System.out.print("host password is : "+kvmHostVO.password);
-		System.out.print("host getpassword is : "+kvmHostVO.password);
-
-	}
-
-
-
-
-
 }

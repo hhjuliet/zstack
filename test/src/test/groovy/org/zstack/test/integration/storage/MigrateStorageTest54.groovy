@@ -25,6 +25,7 @@ class MigrateStorageTest54 extends Test{
 
 	@Override
 	void environment() {
+
 	}
 
 	@Override
