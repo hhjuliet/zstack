@@ -20,11 +20,13 @@ class EncryptTest extends Test{
 	@Override
 	void setup() {
 		spring{
+			sftpBackupStorage()
 			localStorage()
+			virtualRouter()
+			securityGroup()
 			kvm()
 			include("Kvm.xml")
 			include("KVMSimulator.xml")
-
 		}
 	}
 
