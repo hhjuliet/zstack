@@ -26,6 +26,7 @@ class EncryptTest extends Test{
 			virtualRouter()
 			securityGroup()
 			kvm()
+
 			include("Kvm.xml")
 			include("KVMSimulator.xml")
 		}
@@ -150,9 +151,11 @@ class EncryptTest extends Test{
 	void testEncrypt(){
 		ClusterSpec clusterSpec = myenv.specByName("cluster")
 
+
 		println("prestart123")
 
-		KVMHostSpec kvmHostSpec = myenv.specsByName("kvm1")
+		KVMHostSpec kvmHostSpec = myenv.specByName("kvm1")
+
 
 		println("start123")
 
