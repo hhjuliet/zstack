@@ -3,10 +3,13 @@ package org.zstack.test.integration.storage
 import org.springframework.http.HttpEntity
 import org.zstack.header.vm.VmInstanceState
 import org.zstack.header.vm.VmInstanceVO
+import org.zstack.header.volume.Volume
+import org.zstack.header.volume.VolumeInventory
 import org.zstack.kvm.KVMAgentCommands
 import org.zstack.kvm.KVMConstant
 import org.zstack.sdk.VmInstanceInventory
 import org.zstack.testlib.EnvSpec
+import org.zstack.testlib.KVMHostSpec
 import org.zstack.testlib.SpringSpec
 import org.zstack.testlib.Test
 import org.zstack.testlib.VmSpec
@@ -55,6 +58,8 @@ class MigrateStorageTest54 extends Test{
 	void testmigrate(){
 		//stop vm
 		VmSpec spec = migrateStorageenv.specByName("vm")
+		KVMHostSpec kvmHost1 = migrateStorageenv.specByName("kvm1")
+		KVMHostSpec kvmHost2 = migrateStorageenv.specByName("kvm1")
 
 		KVMAgentCommands.StopVmCmd cmd = null
 
@@ -75,9 +80,14 @@ class MigrateStorageTest54 extends Test{
 		def vmvo = dbFindByUuid(cmd.uuid, VmInstanceVO.class)
 		assert vmvo.state == VmInstanceState.Stopped
 
+		localStorageMigrateVolume {
+			volumeUuid = spec.inventory.rootVolumeUuid;
+			destHostUuid = kvmHost1.inventory.uuid;
+		}
 
 		localStorageMigrateVolume {
-
+			volumeUuid = spec.inventory.rootVolumeUuid;
+			destHostUuid = kvmHost2.inventory.uuid;
 		}
 
 	}
