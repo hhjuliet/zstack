@@ -67,7 +67,7 @@ class EncryptTest extends Test{
 					hypervisorType = "KVM"
 
 					kvm {
-						name = "kvm"
+						name = "kvm1"
 						managementIp = "localhost"
 						username = "root"
 						password = "password"
@@ -149,6 +149,10 @@ class EncryptTest extends Test{
 
 	void testEncrypt(){
 		ClusterSpec clusterSpec = myenv.specByName("cluster")
+
+		println("prestart123")
+
+		KVMHostSpec kvmHostSpec = myenv.specsByName("kvm1")
 
 		println("start123")
 
