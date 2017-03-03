@@ -44,8 +44,6 @@ class MigrateStorageTest54 extends Test{
 		ceph()
 		virtualRouter()
 		vyos()
-
-		include("TestLocalStorage54.xml")
 		include("KVMRelated.xml")
 		include("localStorageSimulator.xml")
 		include("localStorage.xml")
